@@ -15,6 +15,10 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,7 +39,9 @@ fun CompanyListingScreen(
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
 
-    var state = viewModel.state
+    val state = viewModel.state
+
+    var isRefreshing by remember { mutableStateOf(false) }
 
 
     Box(
@@ -92,20 +98,23 @@ fun CompanyListingScreen(
         if (pullToRefreshState.isRefreshing) {
             LaunchedEffect(key1 = true) {
                 //state.isLoading = true
-                state = state.copy(isLoading = true)
-                delay(3000L)
+                //state = state.copy(isLoading = true)
+                isRefreshing = true
+
 
                 //state.isLoading = false
-                state = state.copy(isLoading = false)
+                //state = state.copy(isLoading = false)
                 viewModel.onEvent(
                     CompanyListingEvent.Refresh
                 )
+                delay(2500L)
+                isRefreshing = false
 
             }
         }
 
-        LaunchedEffect(state.isLoading) {
-            if (state.isRefreshing) {
+        LaunchedEffect(isRefreshing) {
+            if (isRefreshing) {
                 pullToRefreshState.startRefresh()
             } else {
                 pullToRefreshState.endRefresh()
