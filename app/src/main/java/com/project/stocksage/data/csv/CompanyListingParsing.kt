@@ -14,7 +14,8 @@ class CompanyListingParsing @Inject constructor() : CSVParser<CompanyListing> {
     override suspend fun parse(stream: InputStream): List<CompanyListing> {
         val csvReader = CSVReader(InputStreamReader(stream))
         return withContext(Dispatchers.IO){
-            csvReader.readAll()
+            csvReader
+                .readAll()
                 .drop(1)
                 .mapNotNull { line->
                     val symbol = line.getOrNull(0)
