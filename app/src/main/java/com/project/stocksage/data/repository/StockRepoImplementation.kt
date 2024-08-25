@@ -107,12 +107,17 @@ class StockRepoImplementation @Inject constructor(
         } catch(e: IOException){
             e.printStackTrace()
             Resource.Error(
-                message = "Couldn't Load IntraDay info"
+                message = "Couldn't Load Company info"
             )
         } catch (e: HttpException){
             e.printStackTrace()
             Resource.Error(
-                message = "Couldn't Load IntraDay info"
+                message = "Couldn't Load Company info"
+            )
+        } catch (e: IllegalArgumentException){
+            e.printStackTrace()
+            Resource.Error(
+                message = "Couldn't Load Company info"
             )
         }
     }
