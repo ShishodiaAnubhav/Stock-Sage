@@ -20,11 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.project.stocksage.ui.theme.DarkBlue
-import com.ramcosta.composedestinations.annotation.Destination
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-@Destination
 fun CompanyInfoScreen(
     symbol: String,
     viewModel: CompanyInfoViewModel = hiltViewModel()

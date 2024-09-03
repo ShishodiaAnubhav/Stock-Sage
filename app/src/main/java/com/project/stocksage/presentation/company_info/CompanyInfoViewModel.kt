@@ -26,23 +26,27 @@ class CompanyInfoViewModel @Inject constructor(
             state = state.copy(isLoading = true)
             val companyInfoResult = async { repository.getCompanyInfo(symbol) }
             val intraDayInfoResult = async { repository.getIntraDayInfo(symbol) }
+            companyInfoResult.await().collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                            state = state.copy(
+                                company = result.data,
+                                isLoading = false,
+                                error = null
+                            )
 
-            when(val result = companyInfoResult.await()){
-                is Resource.Success -> {
-                    state = state.copy(
-                        company = result.data,
-                        isLoading = false,
-                        error = null
-                    )
+                    }
+
+                    is Resource.Error -> {
+                        state = state.copy(
+                            isLoading = false,
+                            error = result.message,
+                            company = null
+                        )
+                    }
+
+                    else -> Unit
                 }
-                is Resource.Error -> {
-                    state = state.copy(
-                        isLoading = false,
-                        error = result.message,
-                        company = null
-                    )
-                }
-                else -> Unit
             }
 
             when(val result = intraDayInfoResult.await()){
