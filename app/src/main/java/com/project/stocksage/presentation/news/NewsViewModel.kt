@@ -1,4 +1,4 @@
-package com.project.stocksage.presentation.company_listing
+package com.project.stocksage.presentation.news
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -8,54 +8,40 @@ import androidx.lifecycle.viewModelScope
 import com.project.stocksage.domain.repository.StockRepository
 import com.project.stocksage.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CompanyListingsViewModel @Inject constructor(
+class NewsViewModel @Inject constructor(
     private val repository: StockRepository
-) : ViewModel() {
-
-    var state by mutableStateOf(CompanyListingsState())
-
-    private var searchJob: Job? = null
+) : ViewModel(){
+    var state by mutableStateOf(NewsArticleState())
 
     init {
-        getCompanyListing()
+        getNews()
     }
 
-    fun onEvent(event: CompanyListingEvent) {
-        when (event) {
-            is CompanyListingEvent.Refresh -> {
-                getCompanyListing(fetchFromRemote = true)
-            }
-
-            is CompanyListingEvent.OnSearchQueryChanging -> {
-                state = state.copy(searchQuery = event.query)
-                searchJob?.cancel()
-                searchJob = viewModelScope.launch {
-                    delay(500L)
-                    getCompanyListing()
-                }
+    fun onEvent(event: NewsArticleEvent){
+        when(event){
+            NewsArticleEvent.Refresh -> {
+                getNews(fetchFromRemote = true)
             }
         }
+
     }
 
-    private fun getCompanyListing(
-        query: String = state.searchQuery.lowercase(),
+    private fun getNews(
         fetchFromRemote: Boolean = false
     ) {
         viewModelScope.launch {
             repository
-                .getCompanyListing(fetchFromRemote, query)
+                .getNewsArticle(fetchFromRemote)
                 .collect { result ->
                     when (result) {
                         is Resource.Success -> {
-                            result.data?.let { listings ->
+                            result.data?.let { news ->
                                 state = state.copy(
-                                    companies = listings
+                                    news = news
                                 )
                             }
                         }

@@ -3,6 +3,7 @@ package com.project.stocksage.domain.repository
 import com.project.stocksage.domain.model.CompanyInfo
 import com.project.stocksage.domain.model.CompanyListing
 import com.project.stocksage.domain.model.IntraDayInfo
+import com.project.stocksage.domain.model.NewsArticle
 import com.project.stocksage.util.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +19,9 @@ interface StockRepository {
 
     suspend fun getCompanyInfo(
         symbol: String
-    ): Resource<CompanyInfo>
+    ): Flow<Resource<CompanyInfo>>
+
+    suspend fun getNewsArticle(
+        fetchFromRemote: Boolean,
+    ): Flow<Resource<List<NewsArticle>>>
 }

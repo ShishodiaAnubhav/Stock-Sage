@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.daggerHiltAndroid)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
     id("kotlin-parcelize")
 }
 
@@ -88,6 +89,9 @@ dependencies {
     implementation("io.github.raamcosta.compose-destinations:core:1.11.3-alpha")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.11.3-alpha")
 
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
     // Dagger-Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-android-compiler:2.48.1")
@@ -97,12 +101,20 @@ dependencies {
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    implementation("com.squareup.moshi:moshi-kotlin:1.13.0")
+    implementation("com.squareup.moshi:moshi:1.13.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.13.0")
 
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     // Kotlin Extension and Coroutines support for Room
     implementation("androidx.room:room-ktx:2.6.1")
+
+    //Load Image
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }

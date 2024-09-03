@@ -24,17 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import androidx.navigation.NavController
+import com.project.stocksage.presentation.bottom_navigation.Screens
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@RootNavGraph(start = true)
-@Destination
 fun CompanyListingScreen(
-    navigation: DestinationsNavigator,
+    navController: NavController,
     viewModel: CompanyListingsViewModel = hiltViewModel()
 ) {
     val pullToRefreshState = rememberPullToRefreshState()
@@ -80,7 +77,9 @@ fun CompanyListingScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-                                // TODO: Navigate to detail Screen
+                                navController.navigate(
+                                    Screens.CompanyInfo.createRoute(company.symbol)
+                                )
                             }
                             .padding(16.dp)
                     )

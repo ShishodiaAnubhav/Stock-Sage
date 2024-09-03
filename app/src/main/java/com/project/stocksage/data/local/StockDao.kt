@@ -23,4 +23,20 @@ interface StockDao {
         UPPER(:query) == symbol
     """)
     suspend fun searchCompanyListing(query: String): List<CompanyListingEntity>
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCompanyInfo(
+        companyInfoEntity: CompanyInfoEntity
+    )
+
+    @Query("DELETE FROM companyinfoentity")
+    suspend fun clearCompanyInfo()
+
+    @Query("""
+        SELECT *
+        FROM companyinfoentity
+        WHERE symbol = :symbol
+    """)
+    suspend fun getCompanyInformation(symbol: String): CompanyInfoEntity?
 }
